@@ -17,9 +17,7 @@ img {
   max-width: 100%;
 }
 
-
-
-.timer__items {
+.timer {
   display: flex;
   font-size: 48px;
 }
