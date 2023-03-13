@@ -1,15 +1,17 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
-
-const position = document.querySelector('input[name="step"]');
+const form = document.querySelector('form')
+const step = document.querySelector('input[name="step"]');
 const delay = document.querySelector('input[name="delay"]');
 const amount = document.querySelector('input[name="amount"]');
 
 
-function createPromise(position, delay) {
 
-  // const shouldResolve = Math.random() > 0.3;
+
+
+
+function createPromise(position, delay) {
   
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
@@ -17,12 +19,11 @@ function createPromise(position, delay) {
     setTimeout(() => {
       if (shouldResolve) {
         resolve({ position, delay });
-        Notify.warning(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
       } else {
         reject({ position, delay });
-         Notify.warning(`❌ Rejected promise ${position} in ${delay}ms`);
+       console.log(`❌ Rejected promise ${position} in ${delay}ms`);
       }
-
       }, delay);
   });
 };
@@ -31,20 +32,37 @@ function createPromise(position, delay) {
 
 
 
-createPromise(3, 1500, 5)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-    // Notify.warning(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-    // Notify.warning(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+// createPromise(3, 1500, 5)
+//   .then(({ position, delay }) => {
+//     console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+  
+//   })
+//   .catch(({ position, delay }) => {
+//     console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+//   });
 
 
 
 
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
 
+  let delayInput = parseInt(delay.value);
+  let stepInput = parseInt(step.value);
+  let amountInput = parseInt(amount.value);
+  
+  for(let i = 1; i <= amountInput; i ++) {
+    createPromise (i, delayInput)
+      .then(({ position, delay }) => {
+        Notify.warning(`✅ Fulfilled promise ${position} in ${delay}ms`)
+      })
+      .catch(({ position, delay }) => {
+        Notify.warning(`❌ Rejected promise ${position} in ${delay}ms`);
+      });
+      delayInput += stepInput;
+  }
+  form.reset();
+});
 
 
 
